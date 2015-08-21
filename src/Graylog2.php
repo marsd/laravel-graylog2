@@ -21,6 +21,7 @@ class Graylog2 implements Graylog2Interface
         $this->app['machine'] = config('graylog2.app.machine');
         $this->app['version'] = config('graylog2.app.version');
 
+        $this->lastMessage = null;
         $this->publisher = new Publisher();
 
         $this->connections = config('graylog2.connections');
@@ -69,6 +70,11 @@ class Graylog2 implements Graylog2Interface
         $this->write(LogLevel::DEBUG, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
+    public function getLastMessage()
+    {
+        return $this->lastMessage;
+    }
+
     protected function write($level, $shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
     {
         $message = new Message();
@@ -104,6 +110,8 @@ class Graylog2 implements Graylog2Interface
         if(!is_null($facility)) {
             $message->setFacility($facility);
         }
+
+        $this->lastMessage = $message;
 
         $this->publisher->publish($message);
     }
