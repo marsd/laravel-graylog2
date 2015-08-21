@@ -93,7 +93,7 @@ class Graylog2 implements Graylog2Interface
                 ->setAdditional('request_method', $request->method())
             ;
             if(config('graylog2.log.inputs.do')) {
-                $message->setAdditional('request_inputs', $request->except(config('graylog2.log.inputs.except')));
+                $message->setAdditional('request_inputs', json_encode($request->except(config('graylog2.log.inputs.except'))));
             }
         }
 
@@ -112,7 +112,6 @@ class Graylog2 implements Graylog2Interface
         }
 
         $this->lastMessage = $message;
-
         $this->publisher->publish($message);
     }
 }
