@@ -1,6 +1,7 @@
 <?php
 return [
     'log' => [
+        'type' => 'graylog2',
         'inputs' => [
             'do' => true,
             'except' => [

@@ -22,16 +22,18 @@ class Graylog2 implements Graylog2Interface
         $this->app['version'] = config('graylog2.app.version');
 
         $this->lastMessage = null;
-        $this->publisher = new Publisher();
+        if(config('graylog2.log.type') == 'graylog2') {
+            $this->publisher = new Publisher();
 
-        $this->connections = config('graylog2.connections');
-        foreach($this->connections as $protocol => $con) {
-            switch($con['driver']):
-                case 'udp':
-                    $transport = new UdpTransport($con['host'], $con['port'], UdpTransport::CHUNK_SIZE_LAN);
-                    $this->publisher->addTransport($transport);
-                    break;
-            endswitch;
+            $this->connections = config('graylog2.connections');
+            foreach ($this->connections as $protocol => $con) {
+                switch ($con['driver']):
+                    case 'udp':
+                        $transport = new UdpTransport($con['host'], $con['port'], UdpTransport::CHUNK_SIZE_LAN);
+                        $this->publisher->addTransport($transport);
+                        break;
+                endswitch;
+            }
         }
     }
 
@@ -112,6 +114,33 @@ class Graylog2 implements Graylog2Interface
         }
 
         $this->lastMessage = $message;
-        $this->publisher->publish($message);
+
+        switch(config('graylog2.log.type')) {
+            case 'graylog2':
+                $this->publisher->publish($message);
+                break;
+            case 'file':
+                $file = storage_path('logs'.DIRECTORY_SEPARATOR.'graylog2.log');
+                $message = $message->toArray();
+                $log = [];
+                $log[] = '['.date('Y-m-d H:i:s', $message['timestamp']).']';
+                $log[] = strtoupper($level).' in '.strtoupper($message['file']).' at L'.$message['line'].':';
+                $log[] = "\r\n";
+                $log[] = "COMPONENT:";
+                $log[] = $message['facility'];
+                $log[] = "\r\n";
+                $log[] = 'SHORT_MESSAGE:';
+                $log[] = $message['short_message'];
+                $log[] = "\r\n";
+                $log[] = 'FULL_MESSAGE:';
+                $log[] = $message['full_message'];
+                $log[] = "\r\n";
+                $log[] = 'STRACKTRACE:';
+                $log[] = $exception->getTraceAsString();
+
+                Storage::append($file, $log);
+                break;
+        }
+
     }
 }

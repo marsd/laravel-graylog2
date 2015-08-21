@@ -6,6 +6,7 @@
         "php" : ">=5.5.0",
         "illuminate/support": "5.*",
         "illuminate/http": "5.*",
+        "illuminate/filesystem": "5.*",
         "graylog2/gelf-php": "~1.2"
     },
     "license": "MIT",
