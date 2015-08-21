@@ -10,8 +10,8 @@ return [
     ],
 
     'app' => [
-        'host' => '',
-        'machine' => '',
+        'machine' => env('GRAYLOG_APP_MACHINE', 'localhost'),
+        'host' => env('GRAYLOG_APP_HOST', 'localhost.private'),
         'version' => '',
     ],
 
