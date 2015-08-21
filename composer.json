@@ -1,0 +1,17 @@
+{
+    "name": "absolute-software/laravel-graylog2",
+    "description": "A Laravel 5 package that implements the Graylog2 gelf-php lib.",
+    "type": "library",
+    "require": {
+        "php" : ">=5.5.0",
+        "graylog2/gelf-php": "~1.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Absolute Software GmbH",
+            "email": "info@absolute.de"
+        }
+    ],
+    "minimum-stability": "dev"
+}
