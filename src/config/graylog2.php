@@ -18,9 +18,9 @@ return [
 
     'connections' => [
         'udp' => [
-            'driver'    => 'udp',
-            'host'      => 'localhost',
-            'port'      => 12201,
+            'driver' => 'udp',
+            'host' => 'localhost',
+            'port' => 12201,
         ],
     ],
 ];
