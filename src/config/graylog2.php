@@ -19,7 +19,7 @@ return [
         'udp' => [
             'driver'    => 'udp',
             'host'      => 'localhost',
-            'database'  => 12201,
+            'port'      => 12201,
         ],
     ],
 ];
