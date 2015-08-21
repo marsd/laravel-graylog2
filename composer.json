@@ -4,6 +4,8 @@
     "type": "library",
     "require": {
         "php" : ">=5.5.0",
+        "illuminate/support": "5.*",
+        "illuminate/http": "5.*",
         "graylog2/gelf-php": "~1.2"
     },
     "license": "MIT",
@@ -13,5 +15,10 @@
             "email": "info@absolute.de"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "AbsoluteSoftware\\Graylog2\\": "src"
+        }
+    }
 }
