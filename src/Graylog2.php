@@ -137,7 +137,6 @@ class Graylog2 implements Graylog2Interface
                 } else {
                     \Storage::disk('local')->append($file, $log);
                 }
-                dd(\Storage::disk('local')->get($file));
                 break;
         }
 
