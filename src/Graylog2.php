@@ -120,25 +120,24 @@ class Graylog2 implements Graylog2Interface
                 $this->publisher->publish($message);
                 break;
             case 'file':
-                $file = storage_path('logs'.DIRECTORY_SEPARATOR.'graylog2.log');
+                $file = 'logs'.DIRECTORY_SEPARATOR.'graylog2.log';
                 $message = $message->toArray();
                 $log = [];
+                $log[] = "\n";
                 $log[] = '['.date('Y-m-d H:i:s', $message['timestamp']).']';
-                $log[] = strtoupper($level).' in '.strtoupper($message['file']).' at L'.$message['line'].':';
-                $log[] = "\r\n";
-                $log[] = "COMPONENT:";
-                $log[] = $message['facility'];
-                $log[] = "\r\n";
-                $log[] = 'SHORT_MESSAGE:';
-                $log[] = $message['short_message'];
-                $log[] = "\r\n";
-                $log[] = 'FULL_MESSAGE:';
-                $log[] = $message['full_message'];
-                $log[] = "\r\n";
-                $log[] = 'STRACKTRACE:';
-                $log[] = $exception->getTraceAsString();
+                $log[] = strtoupper($level).' in '.$message['file'].' at L'.$message['line'].':';
+                $log[] = isset($message['facility']) ? "\n" . 'COMPONENT: ' . $message['facility'] : '';
+                $log[] = "\r\n" .'SHORT_MESSAGE: ' . $message['short_message'];
+                $log[] = isset($message['full_message']) ? "\n" . 'FULL_MESSAGE: ' . $message['full_message'] : '';
+                $log[] = isset($message['_exception_trace']) ? "\n" . 'STRACKTRACE: ' . "\n" . $message['_exception_trace'] : '';
+                $log = implode(" ", $log);
 
-                Storage::append($file, $log);
+                if(!\Storage::disk('local')->exists($file)) {
+                    \Storage::disk('local')->put($file, trim($log));
+                } else {
+                    \Storage::disk('local')->append($file, $log);
+                }
+                dd(\Storage::disk('local')->get($file));
                 break;
         }
 
