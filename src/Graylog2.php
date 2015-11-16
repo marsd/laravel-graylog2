@@ -39,37 +39,37 @@ class Graylog2 implements Graylog2Interface
 
     public function alert($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::ALERT, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::ALERT, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function critical($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::CRITICAL, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::CRITICAL, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function error($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::ERROR, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::ERROR, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function warning($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::WARNING, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::WARNING, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function notice($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::NOTICE, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::NOTICE, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function info($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::INFO, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::INFO, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function debug($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
-        $this->write(LogLevel::DEBUG, $shortMessage, $request, $exception, $facility, $timestamp);
+        $this->write(LogLevel::DEBUG, $shortMessage, $request, $exception, $facility, $timestamp, $fullMessage);
     }
 
     public function getLastMessage()
@@ -99,10 +99,6 @@ class Graylog2 implements Graylog2Interface
             }
         }
 
-        if(!is_null($fullMessage)) {
-            $message->setFullMessage($fullMessage);
-        }
-
         if(!is_null($exception)) {
             $message
                 ->setFullMessage($exception->getMessage())
@@ -111,6 +107,10 @@ class Graylog2 implements Graylog2Interface
                 ->setAdditional('exception_code', $exception->getCode())
                 ->setAdditional('exception_trace', $exception->getTraceAsString())
             ;
+        }
+
+        if(!is_null($fullMessage)) {
+            $message->setFullMessage($fullMessage);
         }
 
         if(!is_null($facility)) {
