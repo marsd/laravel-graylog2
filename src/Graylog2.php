@@ -37,37 +37,37 @@ class Graylog2 implements Graylog2Interface
         }
     }
 
-    public function alert($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function alert($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::ALERT, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function critical($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function critical($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::CRITICAL, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function error($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function error($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::ERROR, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function warning($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function warning($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::WARNING, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function notice($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function notice($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::NOTICE, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function info($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function info($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::INFO, $shortMessage, $request, $exception, $facility, $timestamp);
     }
 
-    public function debug($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    public function debug($shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $this->write(LogLevel::DEBUG, $shortMessage, $request, $exception, $facility, $timestamp);
     }
@@ -77,7 +77,7 @@ class Graylog2 implements Graylog2Interface
         return $this->lastMessage;
     }
 
-    protected function write($level, $shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null)
+    protected function write($level, $shortMessage, Request $request = null, $exception = null, $facility = null, $timestamp = null, $fullMessage = null)
     {
         $message = new Message();
         $message
@@ -97,6 +97,10 @@ class Graylog2 implements Graylog2Interface
             if(config('graylog2.log.inputs.do')) {
                 $message->setAdditional('request_inputs', json_encode($request->except(config('graylog2.log.inputs.except'))));
             }
+        }
+
+        if(!is_null($fullMessage)) {
+            $message->setFullMessage($fullMessage);
         }
 
         if(!is_null($exception)) {
