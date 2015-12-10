@@ -93,6 +93,7 @@ class Graylog2 implements Graylog2Interface
             $message
                 ->setAdditional('request_url', $request->url())
                 ->setAdditional('request_method', $request->method())
+                ->setAdditional('request_ip', $request->ip())
             ;
             if(config('graylog2.log.inputs.do')) {
                 $message->setAdditional('request_inputs', json_encode($request->except(config('graylog2.log.inputs.except'))));
