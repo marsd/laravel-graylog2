@@ -7,7 +7,7 @@ class Graylog2ServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->bindShared('graylog2', function($app) {
+        $this->app->singleton('graylog2', function($app) {
             return new Graylog2();
         });
     }
