@@ -16,7 +16,7 @@ class Graylog2ServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/config/graylog2.php' => config_path('graylog2.php'),
-        ]);
+        ], 'config');
     }
 
     public function provides()
